@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en" data-lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Niel MBEDE, robotics engineering student</title>
+<meta name="description" content="Robotics engineering student (Université de Toulouse) working on state estimation, localization and robot learning. Looking for a 6-month internship from March 2027.">
+<meta name="author" content="Niel MBEDE">
+<link rel="canonical" href="https://mbedeniel.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mbedeniel.github.io/">
+<meta property="og:title" content="Niel MBEDE, robotics engineering student">
+<meta property="og:description" content="State estimation, localization and robot learning. Looking for a 6-month internship from March 2027.">
+<meta property="og:image" content="https://mbedeniel.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#101C2E">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  var d = document.documentElement, l, t, q;
+  d.classList.add('js');
+  try { l = localStorage.getItem('lang'); t = localStorage.getItem('theme'); } catch (e) {}
+  try { q = new URLSearchParams(location.search).get('lang'); } catch (e) {}
+  if (q === 'fr' || q === 'en') l = q;
+  if (l === 'fr') { d.lang = 'fr'; d.setAttribute('data-lang', 'fr'); }
+  if (t === 'light') d.setAttribute('data-theme', 'light');
+})();
+</script>
+<style>
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("fonts/instrument-sans.woff2") format("woff2");
+  font-weight: 400 700;
+  font-stretch: 75% 100%;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  --bg: #101C2E;
+  --raise: #16253B;
+  --line: #26394F;
+  --text: #E4EAF2;
+  --muted: #9AAAC0;
+  --accent: #F0B04A;
+  --on-accent: #101C2E;
+  --est: #58C4B9;
+  --truth: #7D8FA8;
+  --lm: #E4EAF2;
+  --range: #33496A;
+  --wrap: 70rem;
+  --gutter: clamp(16px, 4vw, 40px);
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #F4F6F9;
+  --raise: #FFFFFF;
+  --line: #D5DDE7;
+  --text: #13213A;
+  --muted: #4E5E76;
+  --accent: #9A5B00;
+  --on-accent: #FFFFFF;
+  --est: #167A70;
+  --truth: #8C9AB0;
+  --lm: #13213A;
+  --range: #C3CEDC;
+}
+
+/* Language switch: only the active language is shown */
+:root[data-lang="en"] [lang="fr"],
+:root[data-lang="fr"] [lang="en"] { display: none !important; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-variant-numeric: lining-nums;
+  text-rendering: optimizeLegibility;
+}
+a { color: inherit; text-decoration-color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+p, ul, dl, figure { margin: 0; }
+h1, h2, h3 { margin: 0; font-weight: 600; line-height: 1.2; }
+sup { line-height: 0; }
+
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
+.skip { position: absolute; left: -999px; top: 0; padding: .5rem 1rem; background: var(--accent); color: var(--on-accent); z-index: 10; }
+.skip:focus { left: var(--gutter); }
+
+/* Header */
+.top { display: flex; align-items: center; gap: 1.5rem; padding-top: 1.25rem; padding-bottom: 1.25rem; }
+.top .home { font-weight: 600; text-decoration: none; margin-right: auto; }
+.top nav { display: flex; gap: 1.25rem; font-size: .95rem; }
+.top nav a { text-decoration: none; color: var(--muted); }
+.top nav a:hover { color: var(--text); }
+.controls { display: none; align-items: center; gap: .5rem; }
+.js .controls { display: flex; }
+.seg { display: flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; }
+.seg button, .icon-btn {
+  font: inherit; font-size: .85rem; color: var(--muted); background: none; border: 0; cursor: pointer;
+  border-radius: 999px; padding: .25rem .65rem; line-height: 1.4;
+}
+.seg button[aria-pressed="true"] { background: var(--raise); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+.icon-btn { display: grid; place-items: center; width: 2.1rem; height: 2.1rem; padding: 0; border: 1px solid var(--line); }
+.icon-btn:hover, .seg button:hover { color: var(--text); }
+.icon-btn svg { width: 1.05rem; height: 1.05rem; }
+.icon-btn .sun, :root[data-theme="light"] .icon-btn .moon { display: none; }
+:root[data-theme="light"] .icon-btn .sun { display: block; }
+@media (max-width: 760px) { .top nav { display: none; } }
+
+/* Hero */
+.hero {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4.5rem); align-items: center;
+  padding-top: clamp(2rem, 6vw, 5rem); padding-bottom: clamp(3rem, 7vw, 6rem);
+}
+.hero h1 {
+  font-size: clamp(3.4rem, 9vw, 6.6rem);
+  font-stretch: 75%;
+  font-weight: 650;
+  line-height: .92;
+  letter-spacing: -0.005em;
+}
+.role { font-size: clamp(1.2rem, 2.1vw, 1.45rem); line-height: 1.4; margin-top: 1.25rem; max-width: 34ch; }
+.hero .intro { color: var(--muted); margin-top: 1rem; max-width: 46ch; }
+.avail {
+  margin-top: 1.5rem; padding: .85rem 1rem; max-width: 46ch;
+  border-left: 3px solid var(--accent); background: var(--raise); border-radius: 0 6px 6px 0;
+}
+.links { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.75rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: .45rem; text-decoration: none; font-weight: 500;
+  padding: .55rem 1.05rem; border-radius: 999px; border: 1px solid var(--line); font-size: .98rem;
+}
+.btn svg { width: 1rem; height: 1rem; flex: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primary:hover { color: var(--on-accent); filter: brightness(1.06); }
+.btn:not(.primary):hover { border-color: var(--accent); color: var(--text); }
+
+.plot { background: var(--raise); border: 1px solid var(--line); border-radius: 8px; padding: clamp(.75rem, 2vw, 1.25rem); }
+.fig { display: block; width: 100%; height: auto; overflow: visible; }
+.fig .range { fill: none; stroke: var(--range); stroke-width: 1; stroke-dasharray: 2 4; }
+.fig .lm rect { fill: var(--lm); }
+.fig .truth { fill: none; stroke: var(--truth); stroke-width: 1.2; stroke-dasharray: 3 5; }
+.fig .ell ellipse { fill: none; stroke: var(--accent); stroke-width: 1.3; opacity: 0; animation: pop .45s ease-out forwards; animation-delay: calc(var(--d) + .35s); }
+.fig .est { fill: none; stroke: var(--est); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 2.6s linear .35s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes pop { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .fig .est { stroke-dashoffset: 0; animation: none; }
+  .fig .ell ellipse { opacity: 1; animation: none; }
+}
+.legend { display: flex; flex-wrap: wrap; gap: .35rem 1.1rem; margin-top: .75rem; font-size: .85rem; color: var(--muted); list-style: none; padding: 0; }
+.legend li { display: flex; align-items: center; gap: .45rem; }
+.legend svg { width: 1.4rem; height: .9rem; flex: none; }
+.plot figcaption { margin-top: .6rem; font-size: .85rem; color: var(--muted); line-height: 1.5; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; }
+  .role, .hero .intro, .avail { max-width: none; }
+}
+
+/* Sections */
+.section {
+  display: grid; grid-template-columns: 13rem minmax(0, 1fr); gap: 1rem 3rem;
+  padding-top: clamp(2.5rem, 5vw, 4rem); padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  background: linear-gradient(var(--line), var(--line)) center top / calc(100% - 2 * var(--gutter)) 1px no-repeat;
+}
+.section > h2 { font-size: 1.5rem; font-stretch: 85%; font-weight: 650; }
+.section > .body { max-width: 46rem; }
+@media (min-width: 861px) { .section > h2 { position: sticky; top: 1.5rem; align-self: start; } }
+@media (max-width: 860px) { .section { grid-template-columns: 1fr; } }
+
+.entry + .entry { margin-top: 3rem; }
+.when { font-size: .9rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.entry h3 { font-size: 1.2rem; margin-top: .2rem; }
+.org { margin-top: .15rem; }
+.org a { text-decoration: none; }
+.org a:hover { text-decoration: underline; }
+.entry .lead { margin-top: .85rem; }
+.points { margin-top: .75rem; padding-left: 1.1rem; }
+.points li { margin-top: .4rem; }
+.points li::marker { color: var(--accent); }
+.result { margin-top: .9rem; font-weight: 600; }
+.tools { margin-top: .6rem; font-size: .9rem; color: var(--muted); }
+
+.pubs { list-style: none; padding: 0; }
+.pubs li + li { margin-top: 1.25rem; }
+.pubs .venue { color: var(--muted); font-size: .95rem; }
+
+.group + .group { margin-top: 2.75rem; }
+.group > h3 { font-size: 1.05rem; font-weight: 600; color: var(--accent); }
+.proj { padding: 1rem 0; border-bottom: 1px solid var(--line); }
+.proj:last-child { border-bottom: 0; }
+.proj h4 { margin: 0; font-size: 1.05rem; font-weight: 600; }
+.proj h4 .tag { font-weight: 500; font-size: .8rem; color: var(--est); border: 1px solid currentColor; border-radius: 999px; padding: .05rem .5rem; margin-left: .4rem; vertical-align: .1em; }
+.proj p { margin-top: .3rem; }
+.proj .meta { display: flex; flex-wrap: wrap; gap: .25rem 1rem; margin-top: .4rem; font-size: .9rem; color: var(--muted); }
+.proj .meta a { color: var(--text); font-weight: 500; }
+
+.skills { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: .6rem 1.5rem; }
+.skills dt { font-weight: 600; }
+.skills dd { margin: 0; color: var(--muted); }
+@media (max-width: 560px) { .skills { grid-template-columns: 1fr; gap: .1rem; } .skills dd { margin-bottom: .8rem; } }
+
+.contact-list { list-style: none; padding: 0; margin-top: 1rem; }
+.contact-list li + li { margin-top: .5rem; }
+.contact-list a { font-weight: 500; overflow-wrap: anywhere; }
+
+footer { border-top: 1px solid var(--line); padding-top: 1.5rem; padding-bottom: 2.5rem; font-size: .85rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: .5rem 2rem; justify-content: space-between; }
+
+@media print {
+  :root, :root[data-theme="light"], :root[data-theme="dark"] {
+    --bg: #fff; --raise: #fff; --text: #000; --muted: #333; --line: #bbb; --accent: #7a4800; --est: #0d5f57;
+  }
+  .top nav, .controls, .skip, .links { display: none !important; }
+  .section { break-inside: avoid-page; }
+  .fig .est { stroke-dashoffset: 0; animation: none; }
+  .fig .ell ellipse { opacity: 1; animation: none; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="fr">Aller au contenu</span></a>
+
+<header class="wrap top">
+  <a class="home" href="#">Niel MBEDE</a>
+  <nav aria-label="Sections">
+    <a href="#research"><span lang="en">Research</span><span lang="fr">Recherche</span></a>
+    <a href="#projects"><span lang="en">Projects</span><span lang="fr">Projets</span></a>
+    <a href="#education"><span lang="en">Education</span><span lang="fr">Formation</span></a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Language / Langue">
+      <button type="button" data-set-lang="en" aria-pressed="true" title="English">EN</button>
+      <button type="button" data-set-lang="fr" aria-pressed="false" title="Français">FR</button>
+    </div>
+    <button type="button" class="icon-btn" id="theme-btn" aria-label="Switch to light theme">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+<section class="wrap hero" aria-labelledby="name">
+  <div>
+    <h1 id="name">Niel MBEDE</h1>
+    <p class="role" lang="en">Robotics engineering student working on state estimation, localization and robot learning.</p>
+    <p class="role" lang="fr">Élève ingénieur en robotique&#8239;: estimation d’état, localisation et apprentissage pour la robotique.</p>
+    <p class="intro" lang="en">Final year of the robotics engineering degree at UPSSITECH, Université de Toulouse. Research internships at the QUT Centre for Robotics in Australia and at IRIT in Toulouse, with a first-author paper accepted at ACRA 2026.</p>
+    <p class="intro" lang="fr">Dernière année du cycle ingénieur en robotique à l’UPSSITECH, Université de Toulouse. Stages de recherche au QUT Centre for Robotics en Australie et à l’IRIT à Toulouse, avec un article en premier auteur accepté à ACRA 2026.</p>
+    <p class="avail" lang="en">Looking for a <strong>6-month end-of-studies internship from 1&nbsp;March 2027</strong>, in Europe or North America. Open to an R&amp;D engineer role or a PhD afterwards.</p>
+    <p class="avail" lang="fr">Je cherche un <strong>stage de fin d’études de 6&nbsp;mois à partir du 1<sup>er</sup>&nbsp;mars 2027</strong>, en Europe ou en Amérique du Nord. Ensuite, ouvert à un poste d’ingénieur R&amp;D ou à une thèse.</p>
+    <div class="links">
+      <a class="btn primary" href="mailto:ryan-niel.tayou-mbede@utoulouse.fr">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        <span lang="en">Email me</span><span lang="fr">M’écrire</span>
+      </a>
+      <a class="btn" href="https://www.linkedin.com/in/niel-mbede/" rel="me">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4V21H3zM9.5 9.75h3.8v1.6h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5c0-1.2-.02-2.73-1.66-2.73-1.67 0-1.92 1.3-1.92 2.65V21h-4z"/></svg>
+        LinkedIn
+      </a>
+      <a class="btn" href="https://github.com/mbedeniel" rel="me">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+
+  <figure class="plot">
+<svg class="fig" viewBox="0 0 560 343" aria-hidden="true" focusable="false">
+<g class="lm">
+<circle class="range" cx="72.8" cy="286.8" r="60.7"/><rect x="67.8" y="281.8" width="10" height="10"/>
+<circle class="range" cx="266.4" cy="210.4" r="60.7"/><rect x="261.4" y="205.4" width="10" height="10"/>
+<circle class="range" cx="337.0" cy="94.6" r="60.7"/><rect x="332.0" y="89.6" width="10" height="10"/>
+</g>
+<path class="truth" d="M23.1 312.8L28.7 314.3L34.3 315.6L40.0 316.9L45.7 317.9L51.4 318.8L57.1 319.3L62.9 319.6L68.7 319.4L74.4 318.8L80.1 317.8L85.7 316.3L91.1 314.3L96.4 311.8L101.3 308.9L106.0 305.5L110.4 301.7L114.4 297.6L118.0 293.1L121.3 288.3L124.2 283.3L126.7 278.1L128.9 272.8L130.9 267.3L132.5 261.8L134.0 256.2L135.3 250.6L136.6 244.9L137.8 239.3L139.0 233.6L140.3 228.0L141.8 222.4L143.5 216.9L145.4 211.4L147.6 206.1L150.1 200.9L153.0 195.9L156.3 191.1L159.9 186.6L163.9 182.5L168.3 178.7L173.0 175.3L178.0 172.4L183.2 169.9L188.6 167.9L194.2 166.4L199.9 165.4L205.6 164.8L211.4 164.6L217.2 164.8L223.0 165.4L228.7 166.2L234.4 167.3L240.0 168.6L245.6 169.9L251.2 171.3L256.8 172.8L262.4 174.1L268.1 175.4L273.8 176.4L279.5 177.3L285.2 177.8L291.0 178.0L296.8 177.9L302.5 177.3L308.2 176.3L313.8 174.8L319.2 172.8L324.5 170.3L329.4 167.4L334.1 164.0L338.5 160.2L342.5 156.1L346.1 151.6L349.4 146.8L352.3 141.8L354.8 136.6L357.0 131.3L359.0 125.8L360.6 120.3L362.1 114.7L363.4 109.1L364.7 103.4L365.9 97.8L367.1 92.1L368.4 86.5L369.9 80.9L371.6 75.4L373.5 69.9L375.7 64.6L378.2 59.4L381.1 54.4L384.4 49.6L388.0 45.1L392.0 41.0L396.4 37.2L401.1 33.8L406.1 30.9L411.3 28.4L416.7 26.4L422.3 24.9L428.0 23.9L433.7 23.3L439.5 23.1L445.3 23.3L451.1 23.9L456.8 24.7L462.5 25.8L468.1 27.0L473.7 28.4L479.3 29.8L484.9 31.3L490.5 32.6L496.2 33.9L501.9 34.9L507.6 35.8L513.3 36.3L519.1 36.5L524.9 36.4L530.6 35.8"/>
+<g class="ell">
+<ellipse style="--d:0.0s" cx="23.1" cy="312.8" rx="6.2" ry="6.2" transform="rotate(-90.0 23.1 312.8)"/>
+<ellipse style="--d:0.19s" cx="73.4" cy="318.6" rx="4.0" ry="2.4" transform="rotate(165.5 73.4 318.6)"/>
+<ellipse style="--d:0.38s" cx="116.2" cy="293.3" rx="6.3" ry="2.2" transform="rotate(-85.4 116.2 293.3)"/>
+<ellipse style="--d:0.57s" cx="133.2" cy="246.5" rx="10.7" ry="3.0" transform="rotate(-126.0 133.2 246.5)"/>
+<ellipse style="--d:0.76s" cx="145.7" cy="197.1" rx="18.1" ry="4.6" transform="rotate(-145.2 145.7 197.1)"/>
+<ellipse style="--d:0.95s" cx="180.2" cy="161.3" rx="27.4" ry="5.2" transform="rotate(-142.6 180.2 161.3)"/>
+<ellipse style="--d:1.14s" cx="238.4" cy="168.2" rx="5.0" ry="4.2" transform="rotate(-166.1 238.4 168.2)"/>
+<ellipse style="--d:1.33s" cx="287.9" cy="178.4" rx="4.2" ry="2.3" transform="rotate(-133.9 287.9 178.4)"/>
+<ellipse style="--d:1.52s" cx="336.5" cy="164.7" rx="9.2" ry="2.9" transform="rotate(-119.6 336.5 164.7)"/>
+<ellipse style="--d:1.71s" cx="361.3" cy="122.8" rx="3.0" ry="2.4" transform="rotate(-93.3 361.3 122.8)"/>
+<ellipse style="--d:1.9s" cx="372.6" cy="72.9" rx="4.4" ry="2.2" transform="rotate(-131.5 372.6 72.9)"/>
+<ellipse style="--d:2.09s" cx="403.6" cy="33.8" rx="9.8" ry="3.1" transform="rotate(-136.5 403.6 33.8)"/>
+<ellipse style="--d:2.27s" cx="453.3" cy="24.4" rx="16.1" ry="4.3" transform="rotate(-120.3 453.3 24.4)"/>
+<ellipse style="--d:2.46s" cx="502.3" cy="35.6" rx="23.2" ry="6.2" transform="rotate(-103.8 502.3 35.6)"/>
+</g>
+<path class="est" pathLength="1" d="M23.1 312.8L28.9 314.3L33.2 316.4L38.3 317.1L43.9 318.3L50.6 318.5L56.8 319.2L63.1 318.9L69.0 319.3L75.0 318.4L80.7 317.9L86.2 316.5L92.2 314.2L97.2 311.7L101.6 308.3L106.2 304.7L110.2 301.0L114.7 295.8L117.8 291.0L120.8 285.9L123.0 281.1L125.1 276.2L127.5 270.3L129.0 264.3L130.4 258.9L131.7 253.4L132.9 247.9L134.0 242.0L135.1 235.9L136.1 230.0L137.2 224.4L138.5 218.5L139.9 212.9L141.5 207.8L143.4 202.5L145.7 197.1L148.2 192.1L151.1 187.2L154.5 182.2L157.9 177.9L162.1 173.6L166.5 169.7L171.0 166.4L176.2 163.3L181.6 160.7L187.3 158.7L193.1 157.1L198.9 156.1L204.7 155.4L210.3 155.3L215.9 155.4L221.6 155.8L233.0 165.6L241.2 168.9L247.1 169.3L253.2 170.7L259.1 172.2L264.3 173.5L269.7 175.3L274.9 176.8L280.5 177.6L286.4 178.3L292.3 178.6L298.3 178.6L303.7 178.5L309.6 177.3L315.4 175.8L321.1 173.7L326.4 171.3L331.9 168.1L336.5 164.7L340.5 161.2L344.3 157.0L349.2 153.4L350.4 147.4L353.1 142.3L355.5 136.9L357.4 131.4L359.7 126.6L361.7 121.5L362.7 115.7L364.0 109.5L365.6 103.6L366.5 98.1L367.5 92.0L368.8 86.3L370.2 81.0L371.9 76.0L373.7 70.3L376.2 64.8L378.8 59.7L381.8 55.0L385.3 50.2L389.2 45.8L393.6 41.5L398.0 37.6L402.3 34.6L407.7 31.5L413.3 28.9L418.5 27.0L424.2 25.4L430.2 24.4L436.2 23.7L442.3 23.5L447.9 23.7L453.3 24.4L458.9 25.4L464.9 26.8L470.7 28.1L476.4 29.5L481.4 30.7L487.4 32.2L492.4 33.4L497.7 34.6L503.7 35.9L509.6 36.9L514.8 37.6L521.1 38.1L527.0 38.2L532.5 37.9"/>
+</svg>
+    <ul class="legend" aria-hidden="true">
+      <li><svg viewBox="0 0 24 14"><path d="M1 7h22" style="stroke:var(--est)" stroke-width="2.4"/></svg><span lang="en">Kalman estimate</span><span lang="fr">Estimation de Kalman</span></li>
+      <li><svg viewBox="0 0 24 14"><path d="M1 7h22" style="stroke:var(--truth)" stroke-width="1.4" stroke-dasharray="3 4"/></svg><span lang="en">True path</span><span lang="fr">Trajectoire réelle</span></li>
+      <li><svg viewBox="0 0 24 14"><ellipse cx="12" cy="7" rx="10" ry="5" fill="none" style="stroke:var(--accent)" stroke-width="1.4"/></svg><span lang="en">99% confidence</span><span lang="fr">Confiance à 99&#8239;%</span></li>
+      <li><svg viewBox="0 0 24 14"><rect x="7" y="2" width="10" height="10" style="fill:var(--lm)"/></svg><span lang="en">Landmark</span><span lang="fr">Amer</span></li>
+    </ul>
+    <figcaption>
+      <span lang="en">A robot localizes itself from range and bearing measurements to three landmarks. Uncertainty grows while no landmark is in view, then shrinks at each observation. Simulated for this page with the model of my <a href="https://github.com/mbedeniel/Estimation_Localization">Kalman localization project</a>.</span>
+      <span lang="fr">Un robot se localise à partir de mesures de distance et d’angle vers trois amers. L’incertitude grandit quand aucun amer n’est visible, puis diminue à chaque observation. Simulé pour cette page avec le modèle de mon <a href="https://github.com/mbedeniel/Estimation_Localization">projet de localisation par filtre de Kalman</a>.</span>
+    </figcaption>
+  </figure>
+</section>
+
+<section class="wrap section" id="research" aria-labelledby="h-research">
+  <h2 id="h-research"><span lang="en">Research experience</span><span lang="fr">Expérience de recherche</span></h2>
+  <div class="body">
+    <article class="entry">
+      <p class="when"><span lang="en">Apr – Aug 2026</span><span lang="fr">avr. – août 2026</span></p>
+      <h3><span lang="en">Research intern, vision-language-action models for collaborative manipulation</span><span lang="fr">Stage de recherche, modèles vision-langage-action pour la manipulation collaborative</span></h3>
+      <p class="org"><a href="https://www.qut.edu.au/research/centre-for-robotics">QUT Centre for Robotics</a>, Brisbane, <span lang="en">Australia</span><span lang="fr">Australie</span></p>
+      <p class="lead" lang="en">Pre-trained vision-language-action (VLA) policies often fail when an instruction is rephrased or the scene changes. I built light, model-agnostic modules around a frozen policy (OpenVLA, OpenVLA-OFT) that fix this without retraining or new demonstrations.</p>
+      <p class="lead" lang="fr">Les politiques vision-langage-action (VLA) pré-entraînées échouent souvent quand une consigne est reformulée ou que la scène change. J’ai conçu des modules légers, indépendants du modèle, autour d’une politique figée (OpenVLA, OpenVLA-OFT), qui corrigent ces échecs sans réentraînement ni nouvelles démonstrations.</p>
+      <ul class="points" lang="en">
+        <li>Instruction matching with sentence embeddings brought the success rate back from 74.4% to the 92.6% baseline on LIBERO.</li>
+        <li>A compact PyTorch CNN, trained on 700+ hand-annotated frames and running above 100&nbsp;Hz, detects when a sub-task is done and stops the skill.</li>
+        <li>Open-vocabulary detection repaints unseen objects and masks distractors: success went from 6.7% to 66.7% under a visual shift.</li>
+        <li>Separately, fine-tuned OpenVLA, OpenVLA-OFT and LLMs (Gemma, Llama 2), and compared YOLO detectors.</li>
+      </ul>
+      <ul class="points" lang="fr">
+        <li>Un appariement des consignes par embeddings de phrases a ramené le taux de réussite de 74,4&#8239;% à la référence de 92,6&#8239;% sur LIBERO.</li>
+        <li>Un CNN compact en PyTorch, entraîné sur plus de 700 images annotées à la main et tournant à plus de 100&nbsp;Hz, détecte la fin d’une sous-tâche et arrête le geste.</li>
+        <li>Une détection à vocabulaire ouvert recolore les objets inconnus et masque les distracteurs&#8239;: la réussite passe de 6,7&#8239;% à 66,7&#8239;% face à un changement visuel.</li>
+        <li>En parallèle, fine-tuning d’OpenVLA, d’OpenVLA-OFT et de LLM (Gemma, Llama 2), et comparaison de détecteurs YOLO.</li>
+      </ul>
+      <p class="result"><span lang="en">First-author paper accepted at ACRA 2026.</span><span lang="fr">Article en premier auteur accepté à ACRA 2026.</span></p>
+      <p class="tools">Python, PyTorch, Hugging Face, Isaac Sim, LIBERO, CALVIN, <span lang="en">Linux HPC cluster</span><span lang="fr">cluster de calcul Linux</span></p>
+    </article>
+
+    <article class="entry">
+      <p class="when"><span lang="en">May – Jul 2025</span><span lang="fr">mai – juil. 2025</span></p>
+      <h3><span lang="en">Research intern, machine learning for audio signals</span><span lang="fr">Stage de recherche, apprentissage automatique pour les signaux audio</span></h3>
+      <p class="org"><a href="https://www.irit.fr/SAMOVA/site/"><span lang="en">IRIT, SAMoVA team</span><span lang="fr">IRIT, équipe SAMoVA</span></a>, Toulouse</p>
+      <p class="lead" lang="en">Measuring speech intelligibility in aircraft cockpit voice recordings, within the national <a href="https://bleriot.univ-littoral.fr/">BLeRIOT</a> project.</p>
+      <p class="lead" lang="fr">Mesure de l’intelligibilité de la parole dans les enregistreurs phoniques de cockpit d’avions, dans le cadre du projet national <a href="https://bleriot.univ-littoral.fr/">BLeRIOT</a>.</p>
+      <ul class="points" lang="en">
+        <li>Built a labelled dataset of 691 clips from real, very noisy cockpit recordings.</li>
+        <li>Proposed EEET: self-supervised speech embeddings (HuBERT, wav2vec 2.0) with an MLP, reaching 0.91 accuracy with stratified cross-validation.</li>
+        <li>Selected robust features by injecting controlled noise, and traced 75% of outliers to short repetitive segments.</li>
+        <li>The end-to-end tool saved at least 67% of analysis time on 8 hours of recordings.</li>
+      </ul>
+      <ul class="points" lang="fr">
+        <li>Constitution d’un jeu de données annoté de 691 extraits issus de vrais enregistrements de cockpit, très bruités.</li>
+        <li>Proposition d’EEET&#8239;: embeddings de parole auto-supervisés (HuBERT, wav2vec 2.0) et un MLP, avec une exactitude de 0,91 en validation croisée stratifiée.</li>
+        <li>Choix de paramètres robustes par injection de bruit contrôlée, et 75&#8239;% des valeurs aberrantes expliquées par des segments courts et répétitifs.</li>
+        <li>L’outil complet a fait gagner au moins 67&#8239;% du temps d’analyse sur 8&nbsp;heures d’enregistrements.</li>
+      </ul>
+      <p class="result"><span lang="en">Report published on <a href="https://hal.science/hal-05228455v1">HAL</a>.</span><span lang="fr">Rapport publié sur <a href="https://hal.science/hal-05228455v1">HAL</a>.</span></p>
+      <p class="tools">Python, PyTorch, TensorFlow, NumPy, pandas, <span lang="en">Linux cluster</span><span lang="fr">cluster Linux</span></p>
+    </article>
+  </div>
+</section>
+
+<section class="wrap section" id="publications" aria-labelledby="h-pubs">
+  <h2 id="h-pubs">Publications</h2>
+  <div class="body">
+    <ul class="pubs">
+      <li>
+        <cite translate="no">Black-Box Adaptation of Vision-Language-Action Models for Robust Human-Robot Interaction</cite>.
+        <span lang="en">First author.</span><span lang="fr">Premier auteur.</span>
+        <div class="venue"><a href="https://www.araa.asn.au/conference/acra-2026/">Australasian Conference on Robotics and Automation (ACRA 2026)</a>, <span lang="en">accepted</span><span lang="fr">accepté</span>.</div>
+      </li>
+      <li>
+        <cite translate="no">Étude de la mesure d’intelligibilité de signaux audio par des méthodes d’intelligence artificielle</cite><span lang="en"> (in French)</span>.
+        R.&nbsp;N.&nbsp;Tayou Mbede, J.&nbsp;Pinquier.
+        <div class="venue"><span lang="en">IRIT report, 2025.</span><span lang="fr">Rapport IRIT, 2025.</span> <a href="https://hal.science/hal-05228455v1">hal-05228455</a></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="wrap section" id="projects" aria-labelledby="h-projects">
+  <h2 id="h-projects"><span lang="en">Projects</span><span lang="fr">Projets</span></h2>
+  <div class="body">
+    <div class="group">
+      <h3><span lang="en">Estimation and localization</span><span lang="fr">Estimation et localisation</span></h3>
+      <div class="proj">
+        <h4><span lang="en">Kalman localization with landmarks</span><span lang="fr">Localisation par filtre de Kalman avec amers</span></h4>
+        <p lang="en">Kalman filter for a mobile robot that measures range and bearing to known landmarks. Checked the filter’s consistency by comparing empirical and theoretical covariances over Monte Carlo runs, with 99% confidence ellipses.</p>
+        <p lang="fr">Filtre de Kalman pour un robot mobile qui mesure distance et angle vers des amers connus. Cohérence du filtre vérifiée en comparant covariances empiriques et théoriques sur des tirages de Monte-Carlo, avec ellipses de confiance à 99&#8239;%.</p>
+        <p class="meta"><span>MATLAB</span><a href="https://github.com/mbedeniel/Estimation_Localization">Code</a></p>
+      </div>
+      <div class="proj">
+        <h4><span lang="en">Particle-filter SLAM on a TIAGo robot</span><span lang="fr">SLAM par filtrage particulaire sur robot TIAGo</span></h4>
+        <p lang="en">SLAM based on particle filtering, developed in MATLAB and RViz, then run on a real TIAGo robot.</p>
+        <p lang="fr">SLAM fondé sur le filtrage particulaire, développé sous MATLAB et RViz, puis testé sur un vrai robot TIAGo.</p>
+        <p class="meta"><span>MATLAB, ROS 2, RViz</span></p>
+      </div>
+      <div class="proj">
+        <h4><span lang="en">Multi-robot localization with GNSS</span><span lang="fr">Localisation multi-robots avec GNSS</span></h4>
+        <p lang="en">Extended Kalman filter fusing odometry, inter-robot ranges and GNSS for a fleet of five robots, with PD control, in a Python simulation.</p>
+        <p lang="fr">Filtre de Kalman étendu fusionnant odométrie, distances inter-robots et GNSS pour une flotte de cinq robots, avec commande PD, en simulation Python.</p>
+        <p class="meta"><span>Python</span></p>
+      </div>
+      <div class="proj">
+        <h4><span lang="en">IMU sensor fusion on ESP32</span><span lang="fr">Fusion de capteurs IMU sur ESP32</span></h4>
+        <p lang="en">Kalman filter fusing a 9-axis IMU to estimate a robot’s orientation in real time.</p>
+        <p lang="fr">Filtre de Kalman fusionnant une centrale inertielle 9 axes pour estimer l’orientation d’un robot en temps réel.</p>
+        <p class="meta"><span>C++, ESP32</span></p>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3><span lang="en">Robots and control</span><span lang="fr">Robots et commande</span></h3>
+      <div class="proj">
+        <h4><span lang="en">Industry 4.0 collaborative cell</span><span lang="fr">Cellule collaborative Usine 4.0</span><span class="tag" lang="en">Ongoing</span><span class="tag" lang="fr">En cours</span></h4>
+        <p lang="en">Project lead of a 20-student team, Oct 2026 to Feb 2027. A TIAGo mobile manipulator, two Yaskawa HC10 cobots, a conveyor and ZED 2 cameras work together; everything is developed in a ROS 2 / Gazebo digital twin before running on the real cell, with a safety supervisor and reusable code.</p>
+        <p lang="fr">Chef de projet d’une équipe de 20 élèves, d’oct. 2026 à févr. 2027. Un manipulateur mobile TIAGo, deux cobots Yaskawa HC10, un convoyeur et des caméras ZED 2 travaillent ensemble&#8239;; tout est développé dans un jumeau numérique ROS 2 / Gazebo avant de passer sur la vraie cellule, avec un superviseur de sécurité et du code réutilisable.</p>
+        <p class="meta"><span>ROS 2, Gazebo, MoveIt</span></p>
+      </div>
+      <div class="proj">
+        <h4><span lang="en">Multi-sensor ground robot</span><span lang="fr">Robot terrestre multi-capteurs</span></h4>
+        <p lang="en">Mobile robot with LiDAR mapping (ICP), OpenCV vision and ultrasonic sensors, on a Raspberry Pi and an Arduino, with autonomous, teleoperated and voice-command modes.</p>
+        <p lang="fr">Robot mobile avec cartographie LiDAR (ICP), vision OpenCV et capteurs à ultrasons, sur Raspberry Pi et Arduino, avec modes autonome, téléopéré et commande vocale.</p>
+        <p class="meta"><span>Python, C++, Arduino</span><a href="https://github.com/mbedeniel/PFR2">Code</a></p>
+      </div>
+      <div class="proj">
+        <h4><span lang="en">Collision-free motion with MoveIt 2</span><span lang="fr">Trajectoires sans collision avec MoveIt 2</span></h4>
+        <p lang="en">Collision-free arm trajectories that avoid obstacles detected live by an RGB-D camera, and a ROS 2 / Gazebo simulation of the Yaskawa HC10 cobot.</p>
+        <p lang="fr">Trajectoires de bras sans collision qui évitent des obstacles détectés en direct par une caméra RGB-D, et simulation ROS 2 / Gazebo du cobot Yaskawa HC10.</p>
+        <p class="meta"><span>ROS 2, MoveIt 2, Gazebo</span><a href="https://github.com/Leoam24/integration-robotique"><span lang="en">Team repository</span><span lang="fr">Dépôt de l’équipe</span></a></p>
+      </div>
+      <div class="proj">
+        <h4><span lang="en">Joint control of an RP manipulator</span><span lang="fr">Commande articulaire d’un manipulateur RP</span></h4>
+        <p lang="en">PD, PID, feedforward and feedback-linearization controllers for a two-joint arm, compared in simulation.</p>
+        <p lang="fr">Lois de commande PD, PID, par anticipation et par linéarisation entrée-sortie pour un bras à deux articulations, comparées en simulation.</p>
+        <p class="meta"><span>MATLAB, Simulink</span><a href="https://github.com/mbedeniel/Control_Theory">Code</a></p>
+      </div>
+      <div class="proj">
+        <h4><span lang="en">Mobile robot software in C</span><span lang="fr">Logiciel de robot mobile en C</span></h4>
+        <p lang="en">Software bricks for a mobile robot: control interface, image processing without external libraries, voice commands and motion simulation.</p>
+        <p lang="fr">Briques logicielles pour un robot mobile&#8239;: interface de contrôle, traitement d’images sans bibliothèque externe, commande vocale et simulation de déplacement.</p>
+        <p class="meta"><span>C, CMake</span><a href="https://github.com/mbedeniel/PFR1">Code</a></p>
+      </div>
+      <div class="proj">
+        <h4><span lang="en">Industrial robots</span><span lang="fr">Robots industriels</span></h4>
+        <p lang="en">Pick-and-place programs on FANUC and Stäubli arms, and conveyor automation with Petri nets and GRAFCET.</p>
+        <p lang="fr">Programmes de prise et dépose sur bras FANUC et Stäubli, et automatisation d’un convoyeur avec réseaux de Petri et GRAFCET.</p>
+        <p class="meta"><span>FANUC, Stäubli, GRAFCET</span></p>
+      </div>
+      <div class="proj">
+        <h4><span lang="en">Hybrid VTOL drone</span><span lang="fr">Drone hybride à décollage vertical</span></h4>
+        <p lang="en">Fixed-wing drone with vertical take-off, designed in a team of five: NACA 4412 airfoil, servo sizing, energy budget for a two-hour flight, partly 3D-printed prototype.</p>
+        <p lang="fr">Drone à voilure fixe et décollage vertical, conçu en équipe de cinq&#8239;: profil NACA 4412, dimensionnement des servomoteurs, bilan énergétique pour un vol de deux heures, prototype en partie imprimé en 3D.</p>
+        <p class="meta"><span lang="en">Design, 3D printing</span><span lang="fr">Conception, impression 3D</span></p>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3><span lang="en">Learning, signals and electronics</span><span lang="fr">Apprentissage, signal et électronique</span></h3>
+      <div class="proj">
+        <h4><span lang="en">Reinforcement learning on a grid world</span><span lang="fr">Apprentissage par renforcement sur grille</span></h4>
+        <p lang="en">Policy iteration, value iteration and Q-learning compared on a custom 7×7 Frozen Lake environment.</p>
+        <p lang="fr">Itération sur les politiques, itération sur les valeurs et Q-learning comparés sur un environnement Frozen Lake 7×7 conçu sur mesure.</p>
+        <p class="meta"><span>Python</span><a href="https://github.com/mbedeniel/Decision_tools/tree/IA">Code</a></p>
+      </div>
+      <div class="proj">
+        <h4><span lang="en">Voice-controlled calculator</span><span lang="fr">Calculatrice à commande vocale</span></h4>
+        <p lang="en">Speech recognition of digits and operators with hidden Markov models built from phoneme topologies.</p>
+        <p lang="fr">Reconnaissance vocale des chiffres et opérateurs par modèles de Markov cachés construits à partir des phonèmes.</p>
+        <p class="meta"><span>Python</span><a href="https://github.com/mbedeniel/Decision_tools/tree/Markov">Code</a></p>
+      </div>
+      <div class="proj">
+        <h4><span lang="en">Multimodal interaction</span><span lang="fr">Interaction multimodale</span></h4>
+        <p lang="en">A “put that there” fusion engine that combines speech and gestures, with a $N gesture recognizer, over the Ivy software bus.</p>
+        <p lang="fr">Moteur de fusion «&nbsp;mets ça là&nbsp;» qui combine parole et gestes, avec un reconnaisseur de gestes $N, sur le bus logiciel Ivy.</p>
+        <p class="meta"><span>Python</span><a href="https://github.com/mbedeniel/IHM">Code</a></p>
+      </div>
+      <div class="proj">
+        <h4><span lang="en">Smart battery charger</span><span lang="fr">Chargeur de batterie intelligent</span></h4>
+        <p lang="en">Arduino charger that measures voltage and current, stops when the battery is full and shows progress on an LCD. Simulated in Proteus, then built, in a team of five.</p>
+        <p lang="fr">Chargeur sur Arduino qui mesure tension et courant, s’arrête quand la batterie est pleine et affiche la charge sur un écran LCD. Simulé sous Proteus, puis réalisé, en équipe de cinq.</p>
+        <p class="meta"><span>Arduino, Proteus</span><a href="https://github.com/mbedeniel/SMART_CHARGER_ELECTRONIC">Code</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap section" id="education" aria-labelledby="h-edu">
+  <h2 id="h-edu"><span lang="en">Education</span><span lang="fr">Formation</span></h2>
+  <div class="body">
+    <article class="entry">
+      <p class="when">2024 – 2027</p>
+      <h3><span lang="en">Engineering degree in robotics and interactive systems</span><span lang="fr">Diplôme d’ingénieur, systèmes robotiques et interactifs</span></h3>
+      <p class="org"><a href="https://www.upssitech.eu/formation/departement-systemes-robotiques-interactifs-sri/">UPSSITECH</a>, Université de Toulouse</p>
+      <p class="lead" lang="en">Master’s-level engineering degree (Diplôme d’ingénieur). Courses include estimation and localization, particle filtering and SLAM, robot modelling and control, motion planning, computer vision, deep and reinforcement learning, and real-time systems.</p>
+      <p class="lead" lang="fr">Diplôme d’ingénieur (grade de master). Cours notamment en estimation et localisation, filtrage particulaire et SLAM, modélisation et commande des robots, planification de trajectoires, vision par ordinateur, apprentissage profond et par renforcement, et systèmes temps réel.</p>
+    </article>
+    <article class="entry">
+      <p class="when">2022 – 2024</p>
+      <h3><span lang="en">Preparatory classes in mathematics, physics and computer science</span><span lang="fr">Classes préparatoires, mathématiques, physique et informatique</span></h3>
+      <p class="org"><a href="https://3iac.myiuc.com/">Institut Universitaire de la Côte (3IAC)</a>, <span lang="en">Cameroon</span><span lang="fr">Cameroun</span></p>
+    </article>
+  </div>
+</section>
+
+<section class="wrap section" id="skills" aria-labelledby="h-skills">
+  <h2 id="h-skills"><span lang="en">Skills</span><span lang="fr">Compétences</span></h2>
+  <div class="body">
+    <dl class="skills">
+      <dt>Estimation</dt>
+      <dd><span lang="en">Kalman filters (KF, EKF, UKF), particle filters, SLAM, factor graphs, sensor fusion</span><span lang="fr">Filtres de Kalman (KF, EKF, UKF), filtres particulaires, SLAM, graphes de facteurs, fusion de capteurs</span></dd>
+      <dt><span lang="en">Robot learning and AI</span><span lang="fr">Apprentissage et IA</span></dt>
+      <dd><span lang="en">VLA models, imitation and reinforcement learning, CNNs, LLM fine-tuning; PyTorch, Hugging Face, TensorFlow, YOLO, OpenCV</span><span lang="fr">Modèles VLA, apprentissage par imitation et par renforcement, CNN, fine-tuning de LLM&#8239;; PyTorch, Hugging Face, TensorFlow, YOLO, OpenCV</span></dd>
+      <dt><span lang="en">Robotics</span><span lang="fr">Robotique</span></dt>
+      <dd>ROS 2, MoveIt 2, Gazebo, Isaac Sim, TIAGo, Yaskawa HC10, FANUC, Stäubli</dd>
+      <dt><span lang="en">Software</span><span lang="fr">Logiciel</span></dt>
+      <dd>Python, C++, C, MATLAB/Simulink, Bash, Linux, Git, CMake</dd>
+      <dt><span lang="en">Embedded</span><span lang="fr">Embarqué</span></dt>
+      <dd>Raspberry Pi, ESP32, Arduino, FPGA (VHDL), CAN, I2C, SPI, UART</dd>
+      <dt><span lang="en">Languages</span><span lang="fr">Langues</span></dt>
+      <dd><span lang="en">French (native), English (B2, daily working language at QUT), German (A2)</span><span lang="fr">Français (langue maternelle), anglais (B2, langue de travail au QUT), allemand (A2)</span></dd>
+    </dl>
+  </div>
+</section>
+
+<section class="wrap section" id="contact" aria-labelledby="h-contact">
+  <h2 id="h-contact">Contact</h2>
+  <div class="body">
+    <p lang="en">Email is the quickest way to reach me. I’m based in Toulouse, France.</p>
+    <p lang="fr">Le plus simple est de m’écrire par e-mail. Je suis basé à Toulouse.</p>
+    <ul class="contact-list">
+      <li><a href="mailto:ryan-niel.tayou-mbede@utoulouse.fr">ryan-niel.tayou-mbede@utoulouse.fr</a></li>
+      <li><a href="https://www.linkedin.com/in/niel-mbede/" rel="me">linkedin.com/in/niel-mbede</a></li>
+      <li><a href="https://github.com/mbedeniel" rel="me">github.com/mbedeniel</a></li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Niel MBEDE</span>
+  <span><span lang="en">Last updated November 2026</span><span lang="fr">Mis à jour en novembre 2026</span></span>
+</footer>
+
+<script>
+(function () {
+  var d = document.documentElement;
+  var titles = { en: 'Niel MBEDE, robotics engineering student', fr: 'Niel MBEDE, élève ingénieur en robotique' };
+  var themeLabels = {
+    en: { dark: 'Switch to light theme', light: 'Switch to dark theme' },
+    fr: { dark: 'Passer au thème clair', light: 'Passer au thème sombre' }
+  };
+  var langBtns = document.querySelectorAll('[data-set-lang]');
+  var themeBtn = document.getElementById('theme-btn');
+  var meta = document.querySelector('meta[name="theme-color"]');
+
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function sync() {
+    var lang = d.getAttribute('data-lang'), theme = d.getAttribute('data-theme');
+    document.title = titles[lang];
+    for (var i = 0; i < langBtns.length; i++) {
+      langBtns[i].setAttribute('aria-pressed', String(langBtns[i].getAttribute('data-set-lang') === lang));
+    }
+    themeBtn.setAttribute('aria-label', themeLabels[lang][theme]);
+    themeBtn.title = themeLabels[lang][theme];
+    if (meta) meta.setAttribute('content', theme === 'light' ? '#F4F6F9' : '#101C2E');
+  }
+  for (var i = 0; i < langBtns.length; i++) {
+    langBtns[i].addEventListener('click', function () {
+      var l = this.getAttribute('data-set-lang');
+      d.lang = l; d.setAttribute('data-lang', l); save('lang', l); sync();
+    });
+  }
+  themeBtn.addEventListener('click', function () {
+    var t = d.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    d.setAttribute('data-theme', t); save('theme', t); sync();
+  });
+  sync();
+})();
+</script>
+</body>
+</html>
