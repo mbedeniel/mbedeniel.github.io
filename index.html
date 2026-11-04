@@ -52,6 +52,7 @@
   --truth: #7D8FA8;
   --lm: #E4EAF2;
   --range: #33496A;
+  --plate-line: transparent;
   --wrap: 70rem;
   --gutter: clamp(16px, 4vw, 40px);
 }
@@ -68,6 +69,7 @@
   --truth: #8C9AB0;
   --lm: #13213A;
   --range: #C3CEDC;
+  --plate-line: #D5DDE7;
 }
 
 /* Language switch: only the active language is shown */
@@ -183,6 +185,20 @@ sup { line-height: 0; }
 @media (max-width: 860px) { .section { grid-template-columns: 1fr; } }
 
 .entry + .entry { margin-top: 3rem; }
+.entry.has-logo { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: .9rem 1.5rem; align-items: start; }
+.logos { display: flex; flex-direction: column; gap: .5rem; }
+.plate {
+  display: flex; align-items: center; justify-content: center;
+  height: 4.25rem; padding: .5rem .65rem; background: #fff;
+  border-radius: 8px; box-shadow: inset 0 0 0 1px var(--plate-line);
+}
+.plate img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; }
+@media (max-width: 560px) {
+  .entry.has-logo { grid-template-columns: 1fr; }
+  .logos { flex-direction: row; }
+  .plate { width: 8.5rem; }
+}
+.ic { width: 1rem; height: 1rem; fill: currentColor; flex: none; }
 .when { font-size: .9rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .entry h3 { font-size: 1.2rem; margin-top: .2rem; }
 .org { margin-top: .15rem; }
@@ -193,7 +209,9 @@ sup { line-height: 0; }
 .points li { margin-top: .4rem; }
 .points li::marker { color: var(--accent); }
 .result { margin-top: .9rem; font-weight: 600; }
-.tools { margin-top: .6rem; font-size: .9rem; color: var(--muted); }
+.tools, .proj .meta { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem 1rem; font-size: .9rem; color: var(--muted); }
+.tools { margin-top: .75rem; }
+.tools > span, .proj .meta > span, .proj .meta > a { display: inline-flex; align-items: center; gap: .35rem; }
 
 .pubs { list-style: none; padding: 0; }
 .pubs li + li { margin-top: 1.25rem; }
@@ -206,13 +224,24 @@ sup { line-height: 0; }
 .proj h4 { margin: 0; font-size: 1.05rem; font-weight: 600; }
 .proj h4 .tag { font-weight: 500; font-size: .8rem; color: var(--est); border: 1px solid currentColor; border-radius: 999px; padding: .05rem .5rem; margin-left: .4rem; vertical-align: .1em; }
 .proj p { margin-top: .3rem; }
-.proj .meta { display: flex; flex-wrap: wrap; gap: .25rem 1rem; margin-top: .4rem; font-size: .9rem; color: var(--muted); }
+.proj .meta { margin-top: .45rem; }
 .proj .meta a { color: var(--text); font-weight: 500; }
 
 .skills { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: .6rem 1.5rem; }
+.skills { row-gap: 1.1rem; }
 .skills dt { font-weight: 600; }
+.skills dt.c { padding-top: .3rem; }
 .skills dd { margin: 0; color: var(--muted); }
-@media (max-width: 560px) { .skills { grid-template-columns: 1fr; gap: .1rem; } .skills dd { margin-bottom: .8rem; } }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+.skills p + .chips { margin-top: .55rem; }
+.chips + p { margin-top: .5rem; font-size: .92rem; }
+.chip {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .3rem .65rem; border: 1px solid var(--line); border-radius: 6px;
+  color: var(--text); font-size: .92rem; line-height: 1.35;
+}
+.chip .ic { width: 1.1rem; height: 1.1rem; }
+@media (max-width: 560px) { .skills { grid-template-columns: 1fr; gap: .45rem; } .skills dt.c { padding-top: 0; } .skills dd { margin-bottom: .9rem; } }
 
 .contact-list { list-style: none; padding: 0; margin-top: 1rem; }
 .contact-list li + li { margin-top: .5rem; }
@@ -322,7 +351,9 @@ footer { border-top: 1px solid var(--line); padding-top: 1.5rem; padding-bottom:
 <section class="wrap section" id="research" aria-labelledby="h-research">
   <h2 id="h-research"><span lang="en">Research experience</span><span lang="fr">Expérience de recherche</span></h2>
   <div class="body">
-    <article class="entry">
+    <article class="entry has-logo">
+      <div class="logos"><span class="plate"><img src="logos/qut-robotics.png" alt="" width="256" height="124" loading="lazy" decoding="async"></span></div>
+      <div>
       <p class="when"><span lang="en">Apr – Aug 2026</span><span lang="fr">avr. – août 2026</span></p>
       <h3><span lang="en">Research intern, vision-language-action models for collaborative manipulation</span><span lang="fr">Stage de recherche, modèles vision-langage-action pour la manipulation collaborative</span></h3>
       <p class="org"><a href="https://www.qut.edu.au/research/centre-for-robotics">QUT Centre for Robotics</a>, Brisbane, <span lang="en">Australia</span><span lang="fr">Australie</span></p>
@@ -341,10 +372,13 @@ footer { border-top: 1px solid var(--line); padding-top: 1.5rem; padding-bottom:
         <li>En parallèle, fine-tuning d’OpenVLA, d’OpenVLA-OFT et de LLM (Gemma, Llama 2), et comparaison de détecteurs YOLO.</li>
       </ul>
       <p class="result"><span lang="en">First-author paper accepted at ACRA 2026.</span><span lang="fr">Article en premier auteur accepté à ACRA 2026.</span></p>
-      <p class="tools">Python, PyTorch, Hugging Face, Isaac Sim, LIBERO, CALVIN, <span lang="en">Linux HPC cluster</span><span lang="fr">cluster de calcul Linux</span></p>
+      <p class="tools"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#python"/></svg>Python</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#pytorch"/></svg>PyTorch</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#huggingface"/></svg>Hugging Face</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#nvidia"/></svg>Isaac Sim</span><span>LIBERO</span><span>CALVIN</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#linux"/></svg><span lang="en">Linux HPC cluster</span><span lang="fr">cluster de calcul Linux</span></span></p>
+      </div>
     </article>
 
-    <article class="entry">
+    <article class="entry has-logo">
+      <div class="logos"><span class="plate"><img src="logos/irit.png" alt="" width="124" height="124" loading="lazy" decoding="async"></span></div>
+      <div>
       <p class="when"><span lang="en">May – Jul 2025</span><span lang="fr">mai – juil. 2025</span></p>
       <h3><span lang="en">Research intern, machine learning for audio signals</span><span lang="fr">Stage de recherche, apprentissage automatique pour les signaux audio</span></h3>
       <p class="org"><a href="https://www.irit.fr/SAMOVA/site/"><span lang="en">IRIT, SAMoVA team</span><span lang="fr">IRIT, équipe SAMoVA</span></a>, Toulouse</p>
@@ -363,7 +397,8 @@ footer { border-top: 1px solid var(--line); padding-top: 1.5rem; padding-bottom:
         <li>L’outil complet a fait gagner au moins 67&#8239;% du temps d’analyse sur 8&nbsp;heures d’enregistrements.</li>
       </ul>
       <p class="result"><span lang="en">Report published on <a href="https://hal.science/hal-05228455v1">HAL</a>.</span><span lang="fr">Rapport publié sur <a href="https://hal.science/hal-05228455v1">HAL</a>.</span></p>
-      <p class="tools">Python, PyTorch, TensorFlow, NumPy, pandas, <span lang="en">Linux cluster</span><span lang="fr">cluster Linux</span></p>
+      <p class="tools"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#python"/></svg>Python</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#pytorch"/></svg>PyTorch</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#tensorflow"/></svg>TensorFlow</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#numpy"/></svg>NumPy</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#pandas"/></svg>pandas</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#linux"/></svg><span lang="en">Linux cluster</span><span lang="fr">cluster Linux</span></span></p>
+      </div>
     </article>
   </div>
 </section>
@@ -395,25 +430,25 @@ footer { border-top: 1px solid var(--line); padding-top: 1.5rem; padding-bottom:
         <h4><span lang="en">Kalman localization with landmarks</span><span lang="fr">Localisation par filtre de Kalman avec amers</span></h4>
         <p lang="en">Kalman filter for a mobile robot that measures range and bearing to known landmarks. Checked the filter’s consistency by comparing empirical and theoretical covariances over Monte Carlo runs, with 99% confidence ellipses.</p>
         <p lang="fr">Filtre de Kalman pour un robot mobile qui mesure distance et angle vers des amers connus. Cohérence du filtre vérifiée en comparant covariances empiriques et théoriques sur des tirages de Monte-Carlo, avec ellipses de confiance à 99&#8239;%.</p>
-        <p class="meta"><span>MATLAB</span><a href="https://github.com/mbedeniel/Estimation_Localization">Code</a></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#matlab"/></svg>MATLAB</span><a href="https://github.com/mbedeniel/Estimation_Localization"><svg class="ic" aria-hidden="true"><use href="icons.svg#github"/></svg>Code</a></p>
       </div>
       <div class="proj">
         <h4><span lang="en">Particle-filter SLAM on a TIAGo robot</span><span lang="fr">SLAM par filtrage particulaire sur robot TIAGo</span></h4>
         <p lang="en">SLAM based on particle filtering, developed in MATLAB and RViz, then run on a real TIAGo robot.</p>
         <p lang="fr">SLAM fondé sur le filtrage particulaire, développé sous MATLAB et RViz, puis testé sur un vrai robot TIAGo.</p>
-        <p class="meta"><span>MATLAB, ROS 2, RViz</span></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#matlab"/></svg>MATLAB</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#ros"/></svg>ROS 2</span><span>RViz</span></p>
       </div>
       <div class="proj">
         <h4><span lang="en">Multi-robot localization with GNSS</span><span lang="fr">Localisation multi-robots avec GNSS</span></h4>
         <p lang="en">Extended Kalman filter fusing odometry, inter-robot ranges and GNSS for a fleet of five robots, with PD control, in a Python simulation.</p>
         <p lang="fr">Filtre de Kalman étendu fusionnant odométrie, distances inter-robots et GNSS pour une flotte de cinq robots, avec commande PD, en simulation Python.</p>
-        <p class="meta"><span>Python</span></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#python"/></svg>Python</span></p>
       </div>
       <div class="proj">
         <h4><span lang="en">IMU sensor fusion on ESP32</span><span lang="fr">Fusion de capteurs IMU sur ESP32</span></h4>
         <p lang="en">Kalman filter fusing a 9-axis IMU to estimate a robot’s orientation in real time.</p>
         <p lang="fr">Filtre de Kalman fusionnant une centrale inertielle 9 axes pour estimer l’orientation d’un robot en temps réel.</p>
-        <p class="meta"><span>C++, ESP32</span></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#cplusplus"/></svg>C++</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#espressif"/></svg>ESP32</span></p>
       </div>
     </div>
 
@@ -423,37 +458,37 @@ footer { border-top: 1px solid var(--line); padding-top: 1.5rem; padding-bottom:
         <h4><span lang="en">Industry 4.0 collaborative cell</span><span lang="fr">Cellule collaborative Usine 4.0</span><span class="tag" lang="en">Ongoing</span><span class="tag" lang="fr">En cours</span></h4>
         <p lang="en">Project lead of a 20-student team, Oct 2026 to Feb 2027. A TIAGo mobile manipulator, two Yaskawa HC10 cobots, a conveyor and ZED 2 cameras work together; everything is developed in a ROS 2 / Gazebo digital twin before running on the real cell, with a safety supervisor and reusable code.</p>
         <p lang="fr">Chef de projet d’une équipe de 20 élèves, d’oct. 2026 à févr. 2027. Un manipulateur mobile TIAGo, deux cobots Yaskawa HC10, un convoyeur et des caméras ZED 2 travaillent ensemble&#8239;; tout est développé dans un jumeau numérique ROS 2 / Gazebo avant de passer sur la vraie cellule, avec un superviseur de sécurité et du code réutilisable.</p>
-        <p class="meta"><span>ROS 2, Gazebo, MoveIt</span></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#ros"/></svg>ROS 2</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#gazebo"/></svg>Gazebo</span><span>MoveIt</span></p>
       </div>
       <div class="proj">
         <h4><span lang="en">Multi-sensor ground robot</span><span lang="fr">Robot terrestre multi-capteurs</span></h4>
         <p lang="en">Mobile robot with LiDAR mapping (ICP), OpenCV vision and ultrasonic sensors, on a Raspberry Pi and an Arduino, with autonomous, teleoperated and voice-command modes.</p>
         <p lang="fr">Robot mobile avec cartographie LiDAR (ICP), vision OpenCV et capteurs à ultrasons, sur Raspberry Pi et Arduino, avec modes autonome, téléopéré et commande vocale.</p>
-        <p class="meta"><span>Python, C++, Arduino</span><a href="https://github.com/mbedeniel/PFR2">Code</a></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#python"/></svg>Python</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#cplusplus"/></svg>C++</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#raspberrypi"/></svg>Raspberry Pi</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#arduino"/></svg>Arduino</span><a href="https://github.com/mbedeniel/PFR2"><svg class="ic" aria-hidden="true"><use href="icons.svg#github"/></svg>Code</a></p>
       </div>
       <div class="proj">
         <h4><span lang="en">Collision-free motion with MoveIt 2</span><span lang="fr">Trajectoires sans collision avec MoveIt 2</span></h4>
         <p lang="en">Collision-free arm trajectories that avoid obstacles detected live by an RGB-D camera, and a ROS 2 / Gazebo simulation of the Yaskawa HC10 cobot.</p>
         <p lang="fr">Trajectoires de bras sans collision qui évitent des obstacles détectés en direct par une caméra RGB-D, et simulation ROS 2 / Gazebo du cobot Yaskawa HC10.</p>
-        <p class="meta"><span>ROS 2, MoveIt 2, Gazebo</span><a href="https://github.com/Leoam24/integration-robotique"><span lang="en">Team repository</span><span lang="fr">Dépôt de l’équipe</span></a></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#ros"/></svg>ROS 2</span><span>MoveIt 2</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#gazebo"/></svg>Gazebo</span><a href="https://github.com/Leoam24/integration-robotique"><svg class="ic" aria-hidden="true"><use href="icons.svg#github"/></svg><span lang="en">Team repository</span><span lang="fr">Dépôt de l’équipe</span></a></p>
       </div>
       <div class="proj">
         <h4><span lang="en">Joint control of an RP manipulator</span><span lang="fr">Commande articulaire d’un manipulateur RP</span></h4>
         <p lang="en">PD, PID, feedforward and feedback-linearization controllers for a two-joint arm, compared in simulation.</p>
         <p lang="fr">Lois de commande PD, PID, par anticipation et par linéarisation entrée-sortie pour un bras à deux articulations, comparées en simulation.</p>
-        <p class="meta"><span>MATLAB, Simulink</span><a href="https://github.com/mbedeniel/Control_Theory">Code</a></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#matlab"/></svg>MATLAB / Simulink</span><a href="https://github.com/mbedeniel/Control_Theory"><svg class="ic" aria-hidden="true"><use href="icons.svg#github"/></svg>Code</a></p>
       </div>
       <div class="proj">
         <h4><span lang="en">Mobile robot software in C</span><span lang="fr">Logiciel de robot mobile en C</span></h4>
         <p lang="en">Software bricks for a mobile robot: control interface, image processing without external libraries, voice commands and motion simulation.</p>
         <p lang="fr">Briques logicielles pour un robot mobile&#8239;: interface de contrôle, traitement d’images sans bibliothèque externe, commande vocale et simulation de déplacement.</p>
-        <p class="meta"><span>C, CMake</span><a href="https://github.com/mbedeniel/PFR1">Code</a></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#c"/></svg>C</span><span><svg class="ic" aria-hidden="true"><use href="icons.svg#cmake"/></svg>CMake</span><a href="https://github.com/mbedeniel/PFR1"><svg class="ic" aria-hidden="true"><use href="icons.svg#github"/></svg>Code</a></p>
       </div>
       <div class="proj">
         <h4><span lang="en">Industrial robots</span><span lang="fr">Robots industriels</span></h4>
         <p lang="en">Pick-and-place programs on FANUC and Stäubli arms, and conveyor automation with Petri nets and GRAFCET.</p>
         <p lang="fr">Programmes de prise et dépose sur bras FANUC et Stäubli, et automatisation d’un convoyeur avec réseaux de Petri et GRAFCET.</p>
-        <p class="meta"><span>FANUC, Stäubli, GRAFCET</span></p>
+        <p class="meta"><span>FANUC</span><span>Stäubli</span><span>GRAFCET</span></p>
       </div>
       <div class="proj">
         <h4><span lang="en">Hybrid VTOL drone</span><span lang="fr">Drone hybride à décollage vertical</span></h4>
@@ -469,25 +504,25 @@ footer { border-top: 1px solid var(--line); padding-top: 1.5rem; padding-bottom:
         <h4><span lang="en">Reinforcement learning on a grid world</span><span lang="fr">Apprentissage par renforcement sur grille</span></h4>
         <p lang="en">Policy iteration, value iteration and Q-learning compared on a custom 7×7 Frozen Lake environment.</p>
         <p lang="fr">Itération sur les politiques, itération sur les valeurs et Q-learning comparés sur un environnement Frozen Lake 7×7 conçu sur mesure.</p>
-        <p class="meta"><span>Python</span><a href="https://github.com/mbedeniel/Decision_tools/tree/IA">Code</a></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#python"/></svg>Python</span><a href="https://github.com/mbedeniel/Decision_tools/tree/IA"><svg class="ic" aria-hidden="true"><use href="icons.svg#github"/></svg>Code</a></p>
       </div>
       <div class="proj">
         <h4><span lang="en">Voice-controlled calculator</span><span lang="fr">Calculatrice à commande vocale</span></h4>
         <p lang="en">Speech recognition of digits and operators with hidden Markov models built from phoneme topologies.</p>
         <p lang="fr">Reconnaissance vocale des chiffres et opérateurs par modèles de Markov cachés construits à partir des phonèmes.</p>
-        <p class="meta"><span>Python</span><a href="https://github.com/mbedeniel/Decision_tools/tree/Markov">Code</a></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#python"/></svg>Python</span><a href="https://github.com/mbedeniel/Decision_tools/tree/Markov"><svg class="ic" aria-hidden="true"><use href="icons.svg#github"/></svg>Code</a></p>
       </div>
       <div class="proj">
         <h4><span lang="en">Multimodal interaction</span><span lang="fr">Interaction multimodale</span></h4>
         <p lang="en">A “put that there” fusion engine that combines speech and gestures, with a $N gesture recognizer, over the Ivy software bus.</p>
         <p lang="fr">Moteur de fusion «&nbsp;mets ça là&nbsp;» qui combine parole et gestes, avec un reconnaisseur de gestes $N, sur le bus logiciel Ivy.</p>
-        <p class="meta"><span>Python</span><a href="https://github.com/mbedeniel/IHM">Code</a></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#python"/></svg>Python</span><a href="https://github.com/mbedeniel/IHM"><svg class="ic" aria-hidden="true"><use href="icons.svg#github"/></svg>Code</a></p>
       </div>
       <div class="proj">
         <h4><span lang="en">Smart battery charger</span><span lang="fr">Chargeur de batterie intelligent</span></h4>
         <p lang="en">Arduino charger that measures voltage and current, stops when the battery is full and shows progress on an LCD. Simulated in Proteus, then built, in a team of five.</p>
         <p lang="fr">Chargeur sur Arduino qui mesure tension et courant, s’arrête quand la batterie est pleine et affiche la charge sur un écran LCD. Simulé sous Proteus, puis réalisé, en équipe de cinq.</p>
-        <p class="meta"><span>Arduino, Proteus</span><a href="https://github.com/mbedeniel/SMART_CHARGER_ELECTRONIC">Code</a></p>
+        <p class="meta"><span><svg class="ic" aria-hidden="true"><use href="icons.svg#arduino"/></svg>Arduino</span><span>Proteus</span><a href="https://github.com/mbedeniel/SMART_CHARGER_ELECTRONIC"><svg class="ic" aria-hidden="true"><use href="icons.svg#github"/></svg>Code</a></p>
       </div>
     </div>
   </div>
@@ -496,17 +531,23 @@ footer { border-top: 1px solid var(--line); padding-top: 1.5rem; padding-bottom:
 <section class="wrap section" id="education" aria-labelledby="h-edu">
   <h2 id="h-edu"><span lang="en">Education</span><span lang="fr">Formation</span></h2>
   <div class="body">
-    <article class="entry">
+    <article class="entry has-logo">
+      <div class="logos"><span class="plate"><img src="logos/upssitech.png" alt="" width="300" height="96" loading="lazy" decoding="async"></span><span class="plate"><img src="logos/ut.png" alt="" width="300" height="87" loading="lazy" decoding="async"></span></div>
+      <div>
       <p class="when">2024 – 2027</p>
       <h3><span lang="en">Engineering degree in robotics and interactive systems</span><span lang="fr">Diplôme d’ingénieur, systèmes robotiques et interactifs</span></h3>
       <p class="org"><a href="https://www.upssitech.eu/formation/departement-systemes-robotiques-interactifs-sri/">UPSSITECH</a>, Université de Toulouse</p>
       <p class="lead" lang="en">Master’s-level engineering degree (Diplôme d’ingénieur). Courses include estimation and localization, particle filtering and SLAM, robot modelling and control, motion planning, computer vision, deep and reinforcement learning, and real-time systems.</p>
       <p class="lead" lang="fr">Diplôme d’ingénieur (grade de master). Cours notamment en estimation et localisation, filtrage particulaire et SLAM, modélisation et commande des robots, planification de trajectoires, vision par ordinateur, apprentissage profond et par renforcement, et systèmes temps réel.</p>
+      </div>
     </article>
-    <article class="entry">
+    <article class="entry has-logo">
+      <div class="logos"><span class="plate"><img src="logos/3iac.png" alt="" width="145" height="124" loading="lazy" decoding="async"></span><span class="plate"><img src="logos/iuc.png" alt="" width="142" height="124" loading="lazy" decoding="async"></span></div>
+      <div>
       <p class="when">2022 – 2024</p>
       <h3><span lang="en">Preparatory classes in mathematics, physics and computer science</span><span lang="fr">Classes préparatoires, mathématiques, physique et informatique</span></h3>
       <p class="org"><a href="https://3iac.myiuc.com/">Institut Universitaire de la Côte (3IAC)</a>, <span lang="en">Cameroon</span><span lang="fr">Cameroun</span></p>
+      </div>
     </article>
   </div>
 </section>
@@ -517,14 +558,30 @@ footer { border-top: 1px solid var(--line); padding-top: 1.5rem; padding-bottom:
     <dl class="skills">
       <dt>Estimation</dt>
       <dd><span lang="en">Kalman filters (KF, EKF, UKF), particle filters, SLAM, factor graphs, sensor fusion</span><span lang="fr">Filtres de Kalman (KF, EKF, UKF), filtres particulaires, SLAM, graphes de facteurs, fusion de capteurs</span></dd>
+
       <dt><span lang="en">Robot learning and AI</span><span lang="fr">Apprentissage et IA</span></dt>
-      <dd><span lang="en">VLA models, imitation and reinforcement learning, CNNs, LLM fine-tuning; PyTorch, Hugging Face, TensorFlow, YOLO, OpenCV</span><span lang="fr">Modèles VLA, apprentissage par imitation et par renforcement, CNN, fine-tuning de LLM&#8239;; PyTorch, Hugging Face, TensorFlow, YOLO, OpenCV</span></dd>
-      <dt><span lang="en">Robotics</span><span lang="fr">Robotique</span></dt>
-      <dd>ROS 2, MoveIt 2, Gazebo, Isaac Sim, TIAGo, Yaskawa HC10, FANUC, Stäubli</dd>
-      <dt><span lang="en">Software</span><span lang="fr">Logiciel</span></dt>
-      <dd>Python, C++, C, MATLAB/Simulink, Bash, Linux, Git, CMake</dd>
-      <dt><span lang="en">Embedded</span><span lang="fr">Embarqué</span></dt>
-      <dd>Raspberry Pi, ESP32, Arduino, FPGA (VHDL), CAN, I2C, SPI, UART</dd>
+      <dd>
+        <p><span lang="en">VLA models, imitation and reinforcement learning, CNNs, LLM fine-tuning</span><span lang="fr">Modèles VLA, apprentissage par imitation et par renforcement, CNN, fine-tuning de LLM</span></p>
+        <ul class="chips"><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#pytorch"/></svg>PyTorch</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#tensorflow"/></svg>TensorFlow</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#huggingface"/></svg>Hugging Face</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#opencv"/></svg>OpenCV</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#yolo"/></svg>YOLO</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#numpy"/></svg>NumPy</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#pandas"/></svg>pandas</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#jupyter"/></svg>Jupyter</li></ul>
+      </dd>
+
+      <dt class="c"><span lang="en">Robotics</span><span lang="fr">Robotique</span></dt>
+      <dd>
+        <ul class="chips"><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#ros"/></svg>ROS 2</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#gazebo"/></svg>Gazebo</li><li class="chip">MoveIt 2</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#nvidia"/></svg>Isaac Sim</li></ul>
+        <p><span lang="en">Robots used: TIAGo, Yaskawa HC10, FANUC, Stäubli</span><span lang="fr">Robots utilisés&#8239;: TIAGo, Yaskawa HC10, FANUC, Stäubli</span></p>
+      </dd>
+
+      <dt class="c"><span lang="en">Software</span><span lang="fr">Logiciel</span></dt>
+      <dd>
+        <ul class="chips"><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#python"/></svg>Python</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#cplusplus"/></svg>C++</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#c"/></svg>C</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#matlab"/></svg>MATLAB / Simulink</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#bash"/></svg>Bash</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#linux"/></svg>Linux</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#git"/></svg>Git</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#cmake"/></svg>CMake</li></ul>
+      </dd>
+
+      <dt class="c"><span lang="en">Embedded</span><span lang="fr">Embarqué</span></dt>
+      <dd>
+        <ul class="chips"><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#raspberrypi"/></svg>Raspberry Pi</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#arduino"/></svg>Arduino</li><li class="chip"><svg class="ic" aria-hidden="true"><use href="icons.svg#espressif"/></svg>ESP32</li></ul>
+        <p><span lang="en">Also FPGA (VHDL) and CAN, I2C, SPI, UART buses</span><span lang="fr">Aussi FPGA (VHDL) et bus CAN, I2C, SPI, UART</span></p>
+      </dd>
+
       <dt><span lang="en">Languages</span><span lang="fr">Langues</span></dt>
       <dd><span lang="en">French (native), English (B2, daily working language at QUT), German (A2)</span><span lang="fr">Français (langue maternelle), anglais (B2, langue de travail au QUT), allemand (A2)</span></dd>
     </dl>

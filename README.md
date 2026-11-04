@@ -11,6 +11,8 @@ Live at **https://mbedeniel.github.io**
 - Dark theme by default, light theme with the toggle. Both choices are remembered in the visitor's browser.
 - The hero figure is a real extended Kalman filter run (range and bearing to three landmarks), drawn as inline SVG.
 - Font: [Instrument Sans](https://github.com/Instrument/instrument-sans), self-hosted (SIL Open Font License, see `fonts/OFL.txt`).
+- Tool logos: one SVG sprite, `icons.svg`, from [Simple Icons](https://simpleicons.org) (CC0) and [Devicon](https://devicon.dev) (MIT) for MATLAB and Gazebo. A logo is used with `<svg class="ic"><use href="icons.svg#python"/></svg>`.
+- School and lab logos: `logos/`, taken from my own reports and slides. All logos are trademarks of their owners and are shown only to name the institutions and tools.
 
 ## Editing
 
