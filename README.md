@@ -14,6 +14,13 @@ Live at **https://mbedeniel.github.io**
 - Tool logos: one SVG sprite, `icons.svg`, from [Simple Icons](https://simpleicons.org) (CC0) and [Devicon](https://devicon.dev) (MIT) for MATLAB and Gazebo. A logo is used with `<svg class="ic"><use href="icons.svg#python"/></svg>`.
 - School and lab logos: `logos/`, taken from my own reports and slides. All logos are trademarks of their owners and are shown only to name the institutions and tools.
 
+## Visit statistics
+
+- Counted with [GoatCounter](https://www.goatcounter.com): no cookies and no personal data, so no consent banner. The counting script `count.js` is hosted here (ISC license) and loads after the page, so it never slows it down.
+- Dashboard (login required): https://mbedeniel.goatcounter.com. The shortcut `/stats` opens it and stops counting the owner's own visits in that browser.
+- Per-application links: add `?ref=name`, e.g. `https://mbedeniel.github.io/?ref=thales` (works with `&lang=fr`). The name shows up as the visit's source.
+- Clicks are counted on elements that have a `data-goatcounter-click` attribute.
+
 ## Editing
 
 Every text appears twice, once per language:
